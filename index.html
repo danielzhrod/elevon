@@ -100,6 +100,7 @@
       grid-template-rows: 1fr auto;
       padding: 0 6vw;
       position: relative; overflow: hidden;
+      background: var(--bg);
     }
 
     .hero-main {
@@ -108,12 +109,42 @@
       padding-top: 120px;
     }
 
-    /* Subtle noise texture */
-    #inicio::before {
-      content: '';
+    /* ── FLUID GRADIENT (E) ── */
+    .hero-gradient {
       position: absolute; inset: 0; z-index: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      opacity: .5; pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-gradient::before {
+      content: '';
+      position: absolute;
+      width: 160%; height: 160%;
+      top: -30%; left: -30%;
+      background:
+        radial-gradient(ellipse 55% 45% at 70% 30%, rgba(255,77,28,.13) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 20% 80%, rgba(255,77,28,.07) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 90% 70%, rgba(255,140,80,.08) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 60% at 10% 20%, rgba(237,234,226,.9) 0%, transparent 50%);
+      animation: gradientShift 10s ease-in-out infinite alternate;
+    }
+    .hero-gradient::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    @keyframes gradientShift {
+      0%   { transform: translate(0%,   0%)  scale(1);    }
+      25%  { transform: translate(3%,  -4%)  scale(1.04); }
+      50%  { transform: translate(-4%,  3%)  scale(1.02); }
+      75%  { transform: translate(4%,   4%)  scale(1.05); }
+      100% { transform: translate(-3%, -3%)  scale(1.03); }
+    }
+
+    /* ── PARTICLE CANVAS (C) ── */
+    #particleCanvas {
+      position: absolute; inset: 0; z-index: 0;
+      pointer-events: none;
+      opacity: .65;
     }
 
     .hero-eyebrow {
@@ -478,6 +509,8 @@
 
   <!-- HERO -->
   <section id="inicio">
+    <div class="hero-gradient"></div>
+    <canvas id="particleCanvas"></canvas>
     <div class="hero-main">
       <p class="hero-eyebrow">Estudio de diseño web · Valladolid</p>
       <h1 class="hero-title">
@@ -752,6 +785,93 @@
       btn.style.background = '#1a7a3a';
       btn.disabled = true;
     }
+
+    // ── Particle Network (C) ──
+    (function() {
+      const canvas = document.getElementById('particleCanvas');
+      const ctx    = canvas.getContext('2d');
+      const hero   = document.getElementById('inicio');
+
+      let W, H, particles, mouse = { x: -999, y: -999 };
+      const COUNT      = 55;
+      const MAX_DIST   = 145;
+      const MOUSE_DIST = 180;
+
+      function resize() {
+        W = canvas.width  = hero.offsetWidth;
+        H = canvas.height = hero.offsetHeight;
+      }
+
+      function Particle() {
+        this.x  = Math.random() * W;
+        this.y  = Math.random() * H;
+        this.vx = (Math.random() - .5) * .45;
+        this.vy = (Math.random() - .5) * .45;
+        this.r  = Math.random() * 1.8 + .8;
+        this.accent = Math.random() < .18; // ~18% orange dots
+      }
+
+      function init() {
+        resize();
+        particles = Array.from({ length: COUNT }, () => new Particle());
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        // Update & draw dots
+        particles.forEach(p => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > W) p.vx *= -1;
+          if (p.y < 0 || p.y > H) p.vy *= -1;
+
+          // Mouse repulsion
+          const dx = p.x - mouse.x, dy = p.y - mouse.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < MOUSE_DIST) {
+            const force = (MOUSE_DIST - dist) / MOUSE_DIST * .9;
+            p.x += dx / dist * force * 1.6;
+            p.y += dy / dist * force * 1.6;
+          }
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.accent ? 'rgba(255,77,28,.55)' : 'rgba(13,13,13,.25)';
+          ctx.fill();
+        });
+
+        // Draw connecting lines
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const a  = particles[i], b = particles[j];
+            const dx = a.x - b.x,   dy = a.y - b.y;
+            const d  = Math.sqrt(dx*dx + dy*dy);
+            if (d < MAX_DIST) {
+              const alpha = (1 - d / MAX_DIST) * .18;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.strokeStyle = `rgba(13,13,13,${alpha})`;
+              ctx.lineWidth = .7;
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      hero.addEventListener('mousemove', e => {
+        const r = hero.getBoundingClientRect();
+        mouse.x = e.clientX - r.left;
+        mouse.y = e.clientY - r.top;
+      });
+      hero.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
+      window.addEventListener('resize', init);
+
+      init();
+      draw();
+    })();
   </script>
 </body>
 </html>
