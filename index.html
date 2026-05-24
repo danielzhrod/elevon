@@ -482,15 +482,45 @@
     .fg input.error, .fg textarea.error, .fg select.error {
       border-color: var(--accent) !important;
     }
+    .form-submit {
       width: 100%; padding: 15px;
       background: var(--accent); color: #fff;
       font-family: 'Syne', sans-serif; font-size: .8rem;
       letter-spacing: .12em; text-transform: uppercase; font-weight: 600;
       border: none; border-radius: var(--r); cursor: pointer;
       margin-top: 6px;
-      transition: opacity .2s, transform .2s;
+      transition: opacity .2s, transform .2s, background .4s, color .3s, letter-spacing .3s;
+      position: relative; overflow: hidden;
     }
-    .form-submit:hover { opacity: .88; transform: translateY(-1px); }
+    .form-submit:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
+    .form-submit:disabled { cursor: default; transform: none; }
+    .form-submit.sending {
+      background: rgba(245,242,236,.1);
+      color: rgba(245,242,236,.45);
+      pointer-events: none;
+    }
+    .form-submit.sending::after {
+      content: '';
+      position: absolute; left: -100%; top: 0;
+      height: 100%; width: 60%;
+      background: linear-gradient(90deg, transparent, rgba(255,77,28,.18), transparent);
+      animation: shimmer 1.4s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%   { left: -60%; }
+      100% { left: 140%; }
+    }
+    .form-submit.success {
+      background: #1a7a3a;
+      color: #fff;
+      pointer-events: none;
+      letter-spacing: .16em;
+    }
+    .form-submit.error-state {
+      background: rgba(255,77,28,.9);
+      color: #fff;
+      pointer-events: none;
+    }
 
     /* ── FOOTER ── */
     footer {
@@ -928,6 +958,7 @@
 
       // Reset estados
       [nombre, email, tipo, mensaje].forEach(el => el.classList.remove('error'));
+      btn.classList.remove('error-state', 'success', 'sending');
       msgBox.style.display = 'none';
 
       // Validar campos obligatorios
@@ -935,30 +966,24 @@
       if (!nombre.value.trim())  { nombre.classList.add('error');  valid = false; }
       if (!tipo.value)           { tipo.classList.add('error');    valid = false; }
 
-      // Validar email — formato y dominio reconocido o corporativo
+      // Validar email
       const emailVal = email.value.trim().toLowerCase();
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
       const knownDomains = [
         'gmail.com','googlemail.com',
         'hotmail.com','hotmail.es','hotmail.co.uk','hotmail.fr',
         'outlook.com','outlook.es','outlook.fr','outlook.co.uk',
-        'live.com','live.es','live.co.uk',
-        'msn.com',
+        'live.com','live.es','live.co.uk','msn.com',
         'yahoo.com','yahoo.es','yahoo.co.uk','yahoo.fr','yahoo.it',
         'icloud.com','me.com','mac.com',
-        'proton.me','protonmail.com',
-        'tutanota.com',
-        'aol.com',
-        'gmx.com','gmx.es','gmx.net',
-        'web.de','mail.com',
+        'proton.me','protonmail.com','tutanota.com','aol.com',
+        'gmx.com','gmx.es','gmx.net','web.de','mail.com',
         'telefonica.net','movistar.es','orange.es','vodafone.es','jazztel.es',
         'terra.es','ono.com','masmovil.es'
       ];
-
       let emailOk = false;
       if (emailRegex.test(emailVal)) {
         const domain = emailVal.split('@')[1];
-        // Permitir dominios conocidos O dominios corporativos (que tengan punto y no sean .xyz/.tk raros)
         const spamTLDs = ['xyz','tk','ml','ga','cf','gq','pw','top','click','loan','win','bid'];
         const tld = domain.split('.').pop();
         if (knownDomains.includes(domain) || (!spamTLDs.includes(tld) && domain.includes('.'))) {
@@ -968,23 +993,17 @@
       if (!emailVal || !emailOk) { email.classList.add('error'); valid = false; }
 
       if (!valid) {
-        msgBox.style.display = 'block';
-        msgBox.style.background = 'rgba(255,77,28,.12)';
-        msgBox.style.color = '#ff4d1c';
-        msgBox.style.border = '1px solid rgba(255,77,28,.3)';
-        msgBox.textContent = !emailVal || !emailOk
-          ? '⚠ Faltan campos obligatorios o el email no es válido'
-          : '⚠ Faltan campos obligatorios';
-        btn.textContent = '⚠ Faltan campos obligatorios';
-        btn.style.background = 'rgba(255,77,28,.85)';
+        btn.classList.add('error-state');
+        btn.textContent = '⚠  Faltan campos obligatorios';
         setTimeout(() => {
+          btn.classList.remove('error-state');
           btn.textContent = 'Enviar mensaje →';
-          btn.style.background = '';
         }, 3000);
         return;
       }
 
-      // Enviar a Formspree
+      // Enviando
+      btn.classList.add('sending');
       btn.textContent = 'Enviando…';
       btn.disabled = true;
 
@@ -1000,27 +1019,22 @@
           })
         });
 
+        btn.classList.remove('sending');
         if (res.ok) {
-          btn.textContent = '✓ Mensaje enviado — te contactamos pronto';
-          btn.style.background = '#1a7a3a';
-          msgBox.style.display = 'block';
-          msgBox.style.background = 'rgba(26,122,58,.15)';
-          msgBox.style.color = '#1a7a3a';
-          msgBox.style.border = '1px solid rgba(26,122,58,.3)';
-          msgBox.textContent = '✓ Recibido. Te responderemos en menos de 24 horas.';
-          [nombre, email, tipo, mensaje].forEach(el => el.value = '');
+          btn.classList.add('success');
+          btn.textContent = '✓  Mensaje enviado — te contactamos pronto';
+          [nombre, email, mensaje].forEach(el => el.value = '');
           tipo.selectedIndex = 0;
         } else {
-          throw new Error('Error en el servidor');
+          throw new Error();
         }
-      } catch(err) {
+      } catch {
+        btn.classList.remove('sending');
         btn.disabled = false;
         btn.textContent = 'Enviar mensaje →';
         msgBox.style.display = 'block';
-        msgBox.style.background = 'rgba(255,77,28,.12)';
-        msgBox.style.color = '#ff4d1c';
-        msgBox.style.border = '1px solid rgba(255,77,28,.3)';
-        msgBox.textContent = '✗ Error al enviar. Por favor escríbenos directamente a elevongroup@hotmail.com';
+        msgBox.style.cssText = 'display:block; font-size:.8rem; margin-bottom:12px; padding:10px 14px; border-radius:3px; background:rgba(255,77,28,.12); color:#ff4d1c; border:1px solid rgba(255,77,28,.3);';
+        msgBox.textContent = '✗ Error al enviar. Escríbenos a elevongroup@hotmail.com';
       }
     }
 
