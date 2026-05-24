@@ -3,10 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elevon — Diseño Web Profesional</title>
+  <title>Elevon · Diseño Web en Valladolid | Webs a medida para tu negocio</title>
+  <meta name="description" content="Estudio de diseño web en Valladolid. Creamos páginas web a medida, branding, SEO y chatbots para negocios que quieren destacar. Primera consulta gratuita." />
+  <link rel="canonical" href="https://elevon.vercel.app/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://elevon.vercel.app/" />
+  <meta property="og:title"       content="Elevon · Diseño Web en Valladolid" />
+  <meta property="og:description" content="Webs a medida, branding y SEO para negocios que quieren destacar. Estudio en Valladolid. Primera consulta gratuita." />
+  <meta property="og:image"       content="https://raw.githubusercontent.com/danielzhrod/elevon/main/assets/fisiosuab-preview.png" />
+  <meta property="og:locale"      content="es_ES" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Elevon · Diseño Web en Valladolid" />
+  <meta name="twitter:description" content="Webs a medida, branding y SEO para negocios que quieren destacar." />
+  <meta name="twitter:image"       content="https://raw.githubusercontent.com/danielzhrod/elevon/main/assets/fisiosuab-preview.png" />
+
+  <!-- Schema.org LocalBusiness -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Elevon Studio",
+    "description": "Estudio de diseño web en Valladolid. Webs a medida, branding, SEO y chatbots.",
+    "url": "https://elevon.vercel.app/",
+    "email": "elevongroup@hotmail.com",
+    "telephone": "+34600000000",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Valladolid",
+      "addressRegion": "Castilla y León",
+      "addressCountry": "ES"
+    },
+    "openingHours": "Mo-Su 16:00-20:30",
+    "priceRange": "€€",
+    "areaServed": "España"
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@300;400;500;600&display=swap&font-display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -32,7 +71,10 @@
       overflow-x: hidden;
     }
 
-    /* ── CURSOR ── */
+    /* ── CURSOR — ocultar en táctil ── */
+    @media (pointer: coarse) {
+      .cursor, .cursor-ring { display: none !important; }
+    }
     .cursor {
       position: fixed; width: 10px; height: 10px;
       background: var(--accent); border-radius: 50%;
@@ -49,6 +91,13 @@
     }
     .cursor.hover { width: 6px; height: 6px; }
     .cursor-ring.hover { transform: translate(-50%,-50%) scale(1.7); border-color: var(--accent); }
+
+    /* ── FOCUS VISIBLE (accesibilidad teclado) ── */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: var(--r);
+    }
 
     ::-webkit-scrollbar { width: 3px; }
     ::-webkit-scrollbar-track { background: var(--bg2); }
@@ -787,6 +836,36 @@
     </div>
   </section>
 
+  <!-- TESTIMONIOS -->
+  <section id="testimonios" style="background:var(--bg-ink); padding:100px 6vw;">
+    <div class="reveal" style="margin-bottom:56px;">
+      <p class="section-label" style="color:var(--accent);">Lo que dicen</p>
+      <h2 class="section-title" style="color:#f5f2ec;">Clientes que <em>confían</em></h2>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2px; background:rgba(245,242,236,.06); border:1px solid rgba(245,242,236,.06); border-radius:4px; overflow:hidden;">
+      <div class="reveal d1" style="background:var(--bg-ink); padding:44px 36px;">
+        <p style="font-size:1.05rem; color:rgba(245,242,236,.85); line-height:1.75; font-style:italic; margin-bottom:28px;">"Elevon transformó por completo la imagen de nuestra clínica. La web es elegante, rápida y nuestros pacientes la encuentran muy fácil de usar. Las reservas online han aumentado notablemente desde el lanzamiento."</p>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="width:40px; height:40px; border-radius:50%; background:rgba(255,77,28,.2); display:flex; align-items:center; justify-content:center; color:var(--accent); font-family:'Instrument Serif',serif; font-size:1.1rem;">S</div>
+          <div>
+            <p style="color:#f5f2ec; font-weight:500; font-size:.9rem;">Sandra · FisioSUAB</p>
+            <p style="color:rgba(245,242,236,.4); font-size:.78rem; letter-spacing:.08em;">Clínica de Fisioterapia · Valladolid</p>
+          </div>
+        </div>
+      </div>
+      <div class="reveal d2" style="background:var(--bg-ink); padding:44px 36px;">
+        <p style="font-size:1.05rem; color:rgba(245,242,236,.85); line-height:1.75; font-style:italic; margin-bottom:28px;">"Necesitábamos una web que transmitiera la esencia de nuestro asador y Elevon lo logró a la perfección. El diseño, la carta digital y la sección de reservas han mejorado mucho la experiencia de nuestros clientes."</p>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="width:40px; height:40px; border-radius:50%; background:rgba(255,77,28,.2); display:flex; align-items:center; justify-content:center; color:var(--accent); font-family:'Instrument Serif',serif; font-size:1.1rem;">M</div>
+          <div>
+            <p style="color:#f5f2ec; font-weight:500; font-size:.9rem;">Mesón Oriental</p>
+            <p style="color:rgba(245,242,236,.4); font-size:.78rem; letter-spacing:.08em;">Asador · Rueda, Valladolid</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- PROCESO -->
   <section id="proceso">
     <div class="proceso-inner">
@@ -832,7 +911,7 @@
   <section id="contacto">
     <div class="contact-inner">
       <div class="contact-left reveal">
-        <h2>¿Tienes un<br><em>proyecto</em><br>en mente?</h2>
+        <h2>¿Qué tienes<br><em>en mente?</em></h2>
         <p>Cuéntanos en qué consiste. Respondemos en menos de 24 horas y la primera consulta es siempre gratuita.</p>
         <div class="contact-links">
           <a href="mailto:elevongroup@hotmail.com" class="contact-link">
@@ -863,16 +942,16 @@
         <p class="form-title">Cuéntanos tu proyecto</p>
         <div class="form-row">
           <div class="fg">
-            <label>Nombre <span class="req">*</span></label>
+            <label for="f-nombre">Nombre <span class="req">*</span></label>
             <input id="f-nombre" type="text" placeholder="Tu nombre" />
           </div>
           <div class="fg">
-            <label>Email <span class="req">*</span></label>
+            <label for="f-email">Email <span class="req">*</span></label>
             <input id="f-email" type="email" placeholder="tu@email.com" />
           </div>
         </div>
         <div class="fg">
-          <label>Tipo de proyecto <span class="req">*</span></label>
+          <label for="f-tipo">Tipo de proyecto <span class="req">*</span></label>
           <select id="f-tipo">
             <option value="" disabled selected>Selecciona una opción</option>
             <option>Web de empresa / negocio</option>
@@ -884,7 +963,7 @@
           </select>
         </div>
         <div class="fg">
-          <label>Cuéntame tu proyecto</label>
+          <label for="f-mensaje">Cuéntame tu proyecto</label>
           <textarea id="f-mensaje" placeholder="Describe brevemente qué necesitas, en qué plazo y cualquier detalle relevante…"></textarea>
         </div>
         <div id="form-msg" style="display:none; font-size:.8rem; margin-bottom:12px; padding:10px 14px; border-radius:3px;"></div>
@@ -895,9 +974,23 @@
 
   <!-- FOOTER -->
   <footer>
-    <a href="#inicio" class="footer-logo">Elev<span>on</span></a>
-    <p>© 2025 Elevon Studio · Valladolid, España</p>
-    <p>Diseño web premium · Hecho con intención</p>
+    <div style="display:flex; flex-direction:column; gap:4px;">
+      <a href="#inicio" class="footer-logo">Elev<span>on</span></a>
+      <p style="font-size:.76rem; color:rgba(245,242,236,.35);">Estudio de diseño web · Valladolid, España</p>
+    </div>
+    <nav aria-label="Footer" style="display:flex; gap:28px; flex-wrap:wrap;">
+      <a href="#servicios" style="color:rgba(245,242,236,.4); font-size:.76rem; text-decoration:none; letter-spacing:.1em; text-transform:uppercase; transition:color .2s;" onmouseover="this.style.color='#f5f2ec'" onmouseout="this.style.color='rgba(245,242,236,.4)'">Servicios</a>
+      <a href="#trabajos"  style="color:rgba(245,242,236,.4); font-size:.76rem; text-decoration:none; letter-spacing:.1em; text-transform:uppercase; transition:color .2s;" onmouseover="this.style.color='#f5f2ec'" onmouseout="this.style.color='rgba(245,242,236,.4)'">Trabajos</a>
+      <a href="#proceso"   style="color:rgba(245,242,236,.4); font-size:.76rem; text-decoration:none; letter-spacing:.1em; text-transform:uppercase; transition:color .2s;" onmouseover="this.style.color='#f5f2ec'" onmouseout="this.style.color='rgba(245,242,236,.4)'">Proceso</a>
+      <a href="#contacto"  style="color:rgba(245,242,236,.4); font-size:.76rem; text-decoration:none; letter-spacing:.1em; text-transform:uppercase; transition:color .2s;" onmouseover="this.style.color='#f5f2ec'" onmouseout="this.style.color='rgba(245,242,236,.4)'">Contacto</a>
+    </nav>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+      <p style="font-size:.76rem; color:rgba(245,242,236,.35);">© 2026 Elevon Studio</p>
+      <div style="display:flex; gap:16px;">
+        <a href="/privacidad.html" style="color:rgba(245,242,236,.3); font-size:.7rem; text-decoration:none; letter-spacing:.08em;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='rgba(245,242,236,.3)'">Política de privacidad</a>
+        <a href="/aviso-legal.html" style="color:rgba(245,242,236,.3); font-size:.7rem; text-decoration:none; letter-spacing:.08em;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='rgba(245,242,236,.3)'">Aviso legal</a>
+      </div>
+    </div>
   </footer>
 
   <script>
@@ -923,14 +1016,11 @@
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 50));
 
-    // ── Reveal ──
-    new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); } });
-    }, { threshold: .1 }).observe && document.querySelectorAll('.reveal').forEach(el =>
-      new IntersectionObserver((entries) => {
-        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); } });
-      }, { threshold: .1 }).observe(el)
-    );
+    // ── Reveal (un solo observer) ──
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealObserver.unobserve(e.target); } });
+    }, { threshold: .1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
     // ── Work preview on hover ──
     const preview   = document.getElementById('workPreview');
@@ -1068,11 +1158,21 @@
       items.forEach(item => {
         const toggle = item.querySelector('.clay-toggle');
         const panel  = item.querySelector('.clay-panel');
-        if (item.classList.contains('open')) panel.style.maxHeight = panel.scrollHeight + 'px';
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-controls', panel.id || (() => { const id='panel-'+Math.random().toString(36).slice(2); panel.id=id; return id; })());
+        if (item.classList.contains('open')) { panel.style.maxHeight = panel.scrollHeight + 'px'; toggle.setAttribute('aria-expanded','true'); }
         toggle.addEventListener('click', () => {
           const wasOpen = item.classList.contains('open');
-          items.forEach(i => { i.classList.remove('open'); i.querySelector('.clay-panel').style.maxHeight = '0px'; });
-          if (!wasOpen) { item.classList.add('open'); panel.style.maxHeight = panel.scrollHeight + 'px'; }
+          items.forEach(i => {
+            i.classList.remove('open');
+            i.querySelector('.clay-panel').style.maxHeight = '0px';
+            i.querySelector('.clay-toggle').setAttribute('aria-expanded','false');
+          });
+          if (!wasOpen) {
+            item.classList.add('open');
+            panel.style.maxHeight = panel.scrollHeight + 'px';
+            toggle.setAttribute('aria-expanded','true');
+          }
         });
       });
       window.addEventListener('resize', () => {
@@ -1164,8 +1264,18 @@
       hero.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
       window.addEventListener('resize', init);
 
+      let rafId;
+      function drawLoop() {
+        if (!document.hidden) draw();
+        rafId = requestAnimationFrame(drawLoop);
+      }
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) { cancelAnimationFrame(rafId); }
+        else { drawLoop(); }
+      });
+
       init();
-      draw();
+      drawLoop();
     })();
   </script>
 </body>
