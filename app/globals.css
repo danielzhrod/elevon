@@ -521,27 +521,50 @@ footer.main-footer {
   .nav-links, .nav-cta { display: none; }
   .hamburger { display: flex; }
 
-  /* Hero — reducir espacio vacío en mobile */
-  #inicio { min-height: 92vh; }
-  .hero-main { padding-top: 90px; padding-bottom: 4vh; }
-  .hero-title { font-size: clamp(3.2rem, 14vw, 5rem); }
-  .hero-eyebrow { margin-bottom: 18px; }
+  /* Hero — título grande y centrado arriba */
+  #inicio {
+    min-height: 100vh;
+    grid-template-rows: 1fr auto;
+  }
+  .hero-main {
+    padding-top: 100px;
+    padding-bottom: 0;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: .65rem;
+  }
+  .hero-title {
+    font-size: clamp(4rem, 18vw, 6.5rem);
+    line-height: .9;
+  }
 
-  /* Hero bottom — centrar y estirar botones */
+  /* Hero bottom — compacto y centrado */
   .hero-bottom {
     flex-direction: column;
-    align-items: stretch;
-    gap: 24px;
-    padding-bottom: 6vh;
-  }
-  .hero-sub { max-width: 100%; }
-  .hero-actions { flex-direction: column; gap: 12px; }
-  .btn-primary, .btn-ghost {
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 5vh;
     text-align: center;
+  }
+  .hero-sub {
+    max-width: 100%;
+    font-size: .85rem;
+  }
+  .hero-actions {
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+  }
+  .btn-primary, .btn-ghost {
+    padding: 10px 20px;
+    font-size: .68rem;
+    letter-spacing: .08em;
     white-space: nowrap;
-    padding: 16px 24px;
-    width: 100%;
-    display: block;
   }
 
   .form-row { grid-template-columns: 1fr; }
