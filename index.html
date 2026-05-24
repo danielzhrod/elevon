@@ -243,49 +243,101 @@
     }
     .section-title em { font-style: italic; color: var(--accent); }
 
-    /* ── SERVICIOS ── */
-    #servicios { background: var(--bg-ink); color: #f5f2ec; }
+    /* ── SERVICIOS · ESTILO CLAY ── */
+    #servicios { background: var(--bg); color: var(--text); }
     #servicios .section-label { color: var(--accent); }
     #servicios .section-label::before { background: var(--accent); }
-    #servicios .section-title { color: #f5f2ec; }
+    #servicios .section-title { color: var(--text); }
 
-    .services-head {
-      display: flex; align-items: flex-end;
-      justify-content: space-between; gap: 40px;
-      margin-bottom: 72px; flex-wrap: wrap;
-    }
-    .services-head p { max-width: 340px; color: rgba(245,242,236,.55); font-size: .9rem; line-height: 1.75; }
-
-    .services-grid {
+    .clay-wrap {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px; background: rgba(245,242,236,.08);
-      border: 1px solid rgba(245,242,236,.08); border-radius: 4px; overflow: hidden;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: start;
     }
-    .service-card {
-      background: var(--bg-ink); padding: 44px 32px 40px;
-      transition: background .3s; position: relative; overflow: hidden;
-      cursor: default;
+
+    .clay-left {
+      position: sticky; top: 120px;
     }
-    .service-card::after {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-      height: 2px; background: var(--accent);
-      transform: scaleX(0); transform-origin: left;
+    .clay-intro {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.4rem, 2.1vw, 1.85rem);
+      font-weight: 400; line-height: 1.4;
+      letter-spacing: -.01em; color: var(--text);
+      max-width: 480px; margin-top: 24px;
+    }
+    .clay-intro em { font-style: italic; color: var(--accent); }
+
+    .clay-figure-wrap {
+      margin-top: 56px;
+      width: 100%; max-width: 380px;
+      aspect-ratio: 1/1;
+      position: relative;
+    }
+
+    /* Service list (Clay accordion style) */
+    .clay-list { display: flex; flex-direction: column; }
+    .clay-item {
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+    }
+    .clay-item:first-child { border-top: 1px solid var(--border); }
+
+    .clay-toggle {
+      width: 100%; background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 28px 0;
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+      font-weight: 600; color: var(--text);
+      text-align: left; letter-spacing: -.01em;
+      transition: color .25s;
+    }
+    .clay-toggle:hover { color: var(--accent); }
+    .clay-toggle .chevron {
+      width: 22px; height: 22px; flex-shrink: 0;
       transition: transform .4s cubic-bezier(.16,1,.3,1);
     }
-    .service-card:hover { background: #161616; }
-    .service-card:hover::after { transform: scaleX(1); }
+    .clay-item.open .clay-toggle { color: var(--accent); }
+    .clay-item.open .clay-toggle .chevron { transform: rotate(180deg); }
 
-    .service-num {
+    .clay-panel {
+      max-height: 0; overflow: hidden;
+      transition: max-height .55s cubic-bezier(.16,1,.3,1);
+    }
+    .clay-panel-inner {
+      padding: 0 0 32px;
+      color: var(--muted);
+      font-size: .95rem; line-height: 1.78;
+      max-width: 520px;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity .4s .15s, transform .4s .15s;
+    }
+    .clay-item.open .clay-panel-inner { opacity: 1; transform: none; }
+
+    /* ── STATS BLOCK (reemplaza figuras) ── */
+    .clay-stats {
+      margin-top: 56px;
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .clay-stat {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: baseline; gap: 16px;
+    }
+    .clay-stat:first-child { border-top: 1px solid var(--border); }
+    .clay-stat-num {
       font-family: 'Instrument Serif', serif;
-      font-size: 3rem; color: rgba(245,242,236,.1);
-      line-height: 1; margin-bottom: 28px;
+      font-size: clamp(2.6rem, 4vw, 3.8rem);
+      font-weight: 400; line-height: 1;
+      color: var(--text); letter-spacing: -.03em;
     }
-    .service-name {
-      font-size: .95rem; font-weight: 600;
-      color: #f5f2ec; letter-spacing: .03em; margin-bottom: 14px;
+    .clay-stat-num span { color: var(--accent); font-style: italic; }
+    .clay-stat-label {
+      font-size: .78rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--muted);
+      font-weight: 500; padding-top: 4px;
     }
-    .service-desc { font-size: .84rem; color: rgba(245,242,236,.45); line-height: 1.72; }
 
     /* ── TRABAJOS ── */
     #trabajos { background: var(--bg); }
@@ -467,9 +519,12 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1100px) {
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .clay-wrap { gap: 60px; }
     }
     @media (max-width: 900px) {
+      .clay-wrap { grid-template-columns: 1fr; gap: 50px; }
+      .clay-left { position: static; }
+      .clay-figure-wrap { max-width: 320px; margin: 30px auto 0; }
       .proceso-inner { grid-template-columns: 1fr; gap: 52px; }
       .proceso-sticky { position: static; }
       .contact-inner { grid-template-columns: 1fr; gap: 52px; }
@@ -480,9 +535,9 @@
       .nav-links { display: none; }
       .hero-title { font-size: clamp(3.2rem, 14vw, 5rem); }
       .hero-bottom { flex-direction: column; align-items: flex-start; }
-      .services-grid { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
       .works-header { flex-direction: column; align-items: flex-start; }
+      .clay-toggle { font-size: 1.4rem; padding: 22px 0; }
     }
   </style>
 </head>
@@ -550,35 +605,113 @@
     </div>
   </div>
 
-  <!-- SERVICIOS -->
+  <!-- SERVICIOS · ESTILO CLAY -->
   <section id="servicios">
-    <div class="services-head reveal">
-      <div>
+    <div class="clay-wrap">
+
+      <!-- IZQUIERDA: intro + figura 3D -->
+      <div class="clay-left">
         <p class="section-label">Lo que hacemos</p>
-        <h2 class="section-title" style="color:#f5f2ec;">Diseño web que<br><em>convierte</em></h2>
+        <p class="clay-intro">
+          Creamos experiencias digitales transformadoras para negocios que quieren <em>destacar</em>, combinando diseño, tecnología e identidad de marca.
+        </p>
+
+        <!-- STATS -->
+        <div class="clay-stats reveal">
+          <div class="clay-stat">
+            <div class="clay-stat-num"><span class="count" data-to="2">0</span><span>+</span></div>
+            <div class="clay-stat-label">Proyectos entregados</div>
+          </div>
+          <div class="clay-stat">
+            <div class="clay-stat-num"><span class="count" data-to="100">0</span><span style="color:var(--accent);font-style:italic;">%</span></div>
+            <div class="clay-stat-label">Clientes satisfechos</div>
+          </div>
+          <div class="clay-stat">
+            <div class="clay-stat-num"><span style="color:var(--accent);font-style:italic;">&lt;</span><span class="count" data-to="3">0</span></div>
+            <div class="clay-stat-label">Semanas de entrega media</div>
+          </div>
+          <div class="clay-stat">
+            <div class="clay-stat-num"><span class="count" data-to="24">0</span><span>h</span></div>
+            <div class="clay-stat-label">Respuesta garantizada</div>
+          </div>
+        </div>
       </div>
-      <p>Sin plantillas. Sin atajos.<br>Cada web, construida desde cero<br>para el negocio que la necesita.</p>
-    </div>
-    <div class="services-grid">
-      <div class="service-card reveal d1">
-        <div class="service-num">01</div>
-        <h3 class="service-name">Diseño & Desarrollo Web</h3>
-        <p class="service-desc">Sitios a medida, rápidos, accesibles y optimizados para todos los dispositivos. Sin plantillas genéricas.</p>
-      </div>
-      <div class="service-card reveal d2">
-        <div class="service-num">02</div>
-        <h3 class="service-name">Identidad Visual</h3>
-        <p class="service-desc">Logotipo, paleta de colores y tipografía que comunican la esencia de tu marca de forma coherente.</p>
-      </div>
-      <div class="service-card reveal d3">
-        <div class="service-num">03</div>
-        <h3 class="service-name">SEO & Rendimiento</h3>
-        <p class="service-desc">Código limpio y estrategia de posicionamiento para que Google te encuentre antes que a tu competencia.</p>
-      </div>
-      <div class="service-card reveal d4">
-        <div class="service-num">04</div>
-        <h3 class="service-name">Mantenimiento</h3>
-        <p class="service-desc">Actualizaciones, copias de seguridad y soporte continuo para que tu web funcione siempre a pleno rendimiento.</p>
+
+      <!-- DERECHA: lista acordeón -->
+      <div class="clay-list">
+
+        <div class="clay-item open" data-target="1">
+          <button class="clay-toggle">
+            Branding
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="clay-panel">
+            <div class="clay-panel-inner">
+              Una marca es mucho más que un logo. Construimos identidades visuales y verbales sólidas, diseñamos los activos que necesitas y creamos guías de marca claras para que tu mensaje sea coherente en todos los puntos de contacto.
+            </div>
+          </div>
+        </div>
+
+        <div class="clay-item" data-target="2">
+          <button class="clay-toggle">
+            Productos digitales
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="clay-panel">
+            <div class="clay-panel-inner">
+              Combinamos diseño inteligente con experiencia de usuario real para crear productos digitales que conectan. Apps y plataformas que no solo son bonitas, sino útiles, intuitivas y orientadas al resultado.
+            </div>
+          </div>
+        </div>
+
+        <div class="clay-item" data-target="3">
+          <button class="clay-toggle">
+            Sitios web
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="clay-panel">
+            <div class="clay-panel-inner">
+              Tu presencia digital empieza por tu web. Diseñamos sitios a medida que muestran exactamente quién eres y qué ofreces, con una experiencia de navegación fluida que convierte visitas en clientes.
+            </div>
+          </div>
+        </div>
+
+        <div class="clay-item" data-target="4">
+          <button class="clay-toggle">
+            Desarrollo
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="clay-panel">
+            <div class="clay-panel-inner">
+              Construimos productos rápidos, fiables y optimizados para todos los dispositivos. Frontend impecable, backend robusto y código limpio para que tu proyecto funcione hoy y dentro de cinco años.
+            </div>
+          </div>
+        </div>
+
+        <div class="clay-item" data-target="5">
+          <button class="clay-toggle">
+            Contenido
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="clay-panel">
+            <div class="clay-panel-inner">
+              El contenido define cómo se vive tu marca. Creamos textos, ilustraciones, gráficos 2D y 3D, iconografía, animaciones y fotografía para que cada pieza comunique con intención.
+            </div>
+          </div>
+        </div>
+
+        <div class="clay-item" data-target="6">
+          <button class="clay-toggle">
+            SEO & IA
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="clay-panel">
+            <div class="clay-panel-inner">
+              Aplicamos las últimas técnicas de SEO y herramientas de IA para que tu web esté siempre un paso por delante. Posicionamiento en Google, automatización inteligente y nuevas formas de interactuar con tus usuarios.
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -786,6 +919,48 @@
       btn.style.background = '#1a7a3a';
       btn.disabled = true;
     }
+
+    // ── Counters animados ──
+    (function() {
+      const counters = document.querySelectorAll('.count');
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          const el  = e.target;
+          const to  = parseInt(el.dataset.to, 10);
+          const dur = 1400;
+          const step = 16;
+          const steps = dur / step;
+          let current = 0;
+          const inc = to / steps;
+          const timer = setInterval(() => {
+            current = Math.min(current + inc, to);
+            el.textContent = Math.floor(current);
+            if (current >= to) clearInterval(timer);
+          }, step);
+          obs.unobserve(el);
+        });
+      }, { threshold: .5 });
+      counters.forEach(c => obs.observe(c));
+    })();
+    // ── Clay accordion ──
+    (function() {
+      const items = document.querySelectorAll('.clay-item');
+      items.forEach(item => {
+        const toggle = item.querySelector('.clay-toggle');
+        const panel  = item.querySelector('.clay-panel');
+        if (item.classList.contains('open')) panel.style.maxHeight = panel.scrollHeight + 'px';
+        toggle.addEventListener('click', () => {
+          const wasOpen = item.classList.contains('open');
+          items.forEach(i => { i.classList.remove('open'); i.querySelector('.clay-panel').style.maxHeight = '0px'; });
+          if (!wasOpen) { item.classList.add('open'); panel.style.maxHeight = panel.scrollHeight + 'px'; }
+        });
+      });
+      window.addEventListener('resize', () => {
+        const open = document.querySelector('.clay-item.open .clay-panel');
+        if (open) open.style.maxHeight = open.scrollHeight + 'px';
+      });
+    })();
 
     // ── Particle Network (C) ──
     (function() {
