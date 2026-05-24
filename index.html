@@ -1252,8 +1252,12 @@
             }
           }
         }
+      }
 
-        requestAnimationFrame(draw);
+      let rafId;
+      function loop() {
+        if (!document.hidden) draw();
+        rafId = requestAnimationFrame(loop);
       }
 
       hero.addEventListener('mousemove', e => {
@@ -1263,19 +1267,13 @@
       });
       hero.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
       window.addEventListener('resize', init);
-
-      let rafId;
-      function drawLoop() {
-        if (!document.hidden) draw();
-        rafId = requestAnimationFrame(drawLoop);
-      }
       document.addEventListener('visibilitychange', () => {
-        if (document.hidden) { cancelAnimationFrame(rafId); }
-        else { drawLoop(); }
+        if (document.hidden) cancelAnimationFrame(rafId);
+        else loop();
       });
 
       init();
-      drawLoop();
+      loop();
     })();
   </script>
 </body>
