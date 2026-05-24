@@ -478,7 +478,10 @@
     .fg input::placeholder, .fg textarea::placeholder { color: rgba(245,242,236,.25); }
     .fg textarea { resize: vertical; min-height: 110px; }
     .fg select option { background: #1a1a1a; }
-    .form-submit {
+    .fg .req { color: var(--accent); font-size: .9em; }
+    .fg input.error, .fg textarea.error, .fg select.error {
+      border-color: var(--accent) !important;
+    }
       width: 100%; padding: 15px;
       background: var(--accent); color: #fff;
       font-family: 'Syne', sans-serif; font-size: .8rem;
@@ -829,17 +832,17 @@
         <p class="form-title">Cuéntanos tu proyecto</p>
         <div class="form-row">
           <div class="fg">
-            <label>Nombre</label>
-            <input type="text" placeholder="Tu nombre" />
+            <label>Nombre <span class="req">*</span></label>
+            <input id="f-nombre" type="text" placeholder="Tu nombre" />
           </div>
           <div class="fg">
-            <label>Email</label>
-            <input type="email" placeholder="tu@email.com" />
+            <label>Email <span class="req">*</span></label>
+            <input id="f-email" type="email" placeholder="tu@email.com" />
           </div>
         </div>
         <div class="fg">
-          <label>Tipo de proyecto</label>
-          <select>
+          <label>Tipo de proyecto <span class="req">*</span></label>
+          <select id="f-tipo">
             <option value="" disabled selected>Selecciona una opción</option>
             <option>Web de empresa / negocio</option>
             <option>Restaurante / Hostelería</option>
@@ -851,9 +854,10 @@
         </div>
         <div class="fg">
           <label>Cuéntame tu proyecto</label>
-          <textarea placeholder="Describe brevemente qué necesitas, en qué plazo y cualquier detalle relevante…"></textarea>
+          <textarea id="f-mensaje" placeholder="Describe brevemente qué necesitas, en qué plazo y cualquier detalle relevante…"></textarea>
         </div>
-        <button class="form-submit" onclick="handleSubmit(this)">Enviar mensaje →</button>
+        <div id="form-msg" style="display:none; font-size:.8rem; margin-bottom:12px; padding:10px 14px; border-radius:3px;"></div>
+        <button class="form-submit" id="f-btn" onclick="handleSubmit()">Enviar mensaje →</button>
       </div>
     </div>
   </section>
@@ -913,11 +917,111 @@
       row.addEventListener('mouseleave', () => preview.classList.remove('visible'));
     });
 
-    // ── Form submit ──
-    function handleSubmit(btn) {
-      btn.textContent = '✓ Mensaje enviado — te contactamos pronto';
-      btn.style.background = '#1a7a3a';
+    // ── Form submit con validación + Formspree ──
+    async function handleSubmit() {
+      const btn     = document.getElementById('f-btn');
+      const nombre  = document.getElementById('f-nombre');
+      const email   = document.getElementById('f-email');
+      const tipo    = document.getElementById('f-tipo');
+      const mensaje = document.getElementById('f-mensaje');
+      const msgBox  = document.getElementById('form-msg');
+
+      // Reset estados
+      [nombre, email, tipo, mensaje].forEach(el => el.classList.remove('error'));
+      msgBox.style.display = 'none';
+
+      // Validar campos obligatorios
+      let valid = true;
+      if (!nombre.value.trim())  { nombre.classList.add('error');  valid = false; }
+      if (!tipo.value)           { tipo.classList.add('error');    valid = false; }
+
+      // Validar email — formato y dominio reconocido o corporativo
+      const emailVal = email.value.trim().toLowerCase();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      const knownDomains = [
+        'gmail.com','googlemail.com',
+        'hotmail.com','hotmail.es','hotmail.co.uk','hotmail.fr',
+        'outlook.com','outlook.es','outlook.fr','outlook.co.uk',
+        'live.com','live.es','live.co.uk',
+        'msn.com',
+        'yahoo.com','yahoo.es','yahoo.co.uk','yahoo.fr','yahoo.it',
+        'icloud.com','me.com','mac.com',
+        'proton.me','protonmail.com',
+        'tutanota.com',
+        'aol.com',
+        'gmx.com','gmx.es','gmx.net',
+        'web.de','mail.com',
+        'telefonica.net','movistar.es','orange.es','vodafone.es','jazztel.es',
+        'terra.es','ono.com','masmovil.es'
+      ];
+
+      let emailOk = false;
+      if (emailRegex.test(emailVal)) {
+        const domain = emailVal.split('@')[1];
+        // Permitir dominios conocidos O dominios corporativos (que tengan punto y no sean .xyz/.tk raros)
+        const spamTLDs = ['xyz','tk','ml','ga','cf','gq','pw','top','click','loan','win','bid'];
+        const tld = domain.split('.').pop();
+        if (knownDomains.includes(domain) || (!spamTLDs.includes(tld) && domain.includes('.'))) {
+          emailOk = true;
+        }
+      }
+      if (!emailVal || !emailOk) { email.classList.add('error'); valid = false; }
+
+      if (!valid) {
+        msgBox.style.display = 'block';
+        msgBox.style.background = 'rgba(255,77,28,.12)';
+        msgBox.style.color = '#ff4d1c';
+        msgBox.style.border = '1px solid rgba(255,77,28,.3)';
+        msgBox.textContent = !emailVal || !emailOk
+          ? '⚠ Faltan campos obligatorios o el email no es válido'
+          : '⚠ Faltan campos obligatorios';
+        btn.textContent = '⚠ Faltan campos obligatorios';
+        btn.style.background = 'rgba(255,77,28,.85)';
+        setTimeout(() => {
+          btn.textContent = 'Enviar mensaje →';
+          btn.style.background = '';
+        }, 3000);
+        return;
+      }
+
+      // Enviar a Formspree
+      btn.textContent = 'Enviando…';
       btn.disabled = true;
+
+      try {
+        const res = await fetch('https://formspree.io/f/TU_ID_AQUI', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            nombre:  nombre.value.trim(),
+            email:   emailVal,
+            tipo:    tipo.value,
+            mensaje: mensaje.value.trim()
+          })
+        });
+
+        if (res.ok) {
+          btn.textContent = '✓ Mensaje enviado — te contactamos pronto';
+          btn.style.background = '#1a7a3a';
+          msgBox.style.display = 'block';
+          msgBox.style.background = 'rgba(26,122,58,.15)';
+          msgBox.style.color = '#1a7a3a';
+          msgBox.style.border = '1px solid rgba(26,122,58,.3)';
+          msgBox.textContent = '✓ Recibido. Te responderemos en menos de 24 horas.';
+          [nombre, email, tipo, mensaje].forEach(el => el.value = '');
+          tipo.selectedIndex = 0;
+        } else {
+          throw new Error('Error en el servidor');
+        }
+      } catch(err) {
+        btn.disabled = false;
+        btn.textContent = 'Enviar mensaje →';
+        msgBox.style.display = 'block';
+        msgBox.style.background = 'rgba(255,77,28,.12)';
+        msgBox.style.color = '#ff4d1c';
+        msgBox.style.border = '1px solid rgba(255,77,28,.3)';
+        msgBox.textContent = '✗ Error al enviar. Por favor escríbenos directamente a elevongroup@hotmail.com';
+      }
     }
 
     // ── Counters animados ──
