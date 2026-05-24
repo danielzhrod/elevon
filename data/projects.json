@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "num": "01",
+    "title": "FisioSUAB",
+    "tag": "Clínica · Valladolid",
+    "description": "Web premium para clínica de fisioterapia especializada en suelo pélvico y rehabilitación integral. Diseño elegante, reserva de citas y SEO local.",
+    "url": "https://fisiosuab.vercel.app/",
+    "image": "https://raw.githubusercontent.com/danielzhrod/elevon/main/assets/fisiosuab-preview.png",
+    "imageAlt": "Captura de la web de FisioSUAB — clínica de fisioterapia en Valladolid",
+    "tags": ["Diseño web", "SEO local", "Reserva de citas"]
+  },
+  {
+    "id": 2,
+    "num": "02",
+    "title": "Asador Mesón Oriental",
+    "tag": "Restaurante · Rueda, Valladolid",
+    "description": "Sitio web para asador castellano tradicional. Carta digital, atmósfera visual auténtica y diseño pensado para atraer reservas.",
+    "url": "https://meson-oriental.vercel.app/",
+    "image": "https://raw.githubusercontent.com/danielzhrod/elevon/main/assets/meson-preview.png",
+    "imageAlt": "Captura de la web del Asador Mesón Oriental en Rueda, Valladolid",
+    "tags": ["Diseño web", "Carta digital", "Restauración"]
+  }
+]
