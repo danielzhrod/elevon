@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elevon — Diseño Web Profesional</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #f5f2ec;
+      --bg2:     #edeae2;
+      --bg-ink:  #0d0d0d;
+      --text:    #0d0d0d;
+      --muted:   #7a756e;
+      --accent:  #ff4d1c;
+      --border:  rgba(13,13,13,.1);
+      --r:       3px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── CURSOR ── */
+    .cursor {
+      position: fixed; width: 10px; height: 10px;
+      background: var(--accent); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width .2s, height .2s, opacity .2s;
+    }
+    .cursor-ring {
+      position: fixed; width: 38px; height: 38px;
+      border: 1.5px solid var(--text); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: transform .3s cubic-bezier(.16,1,.3,1), border-color .2s;
+    }
+    .cursor.hover { width: 6px; height: 6px; }
+    .cursor-ring.hover { transform: translate(-50%,-50%) scale(1.7); border-color: var(--accent); }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 30px 6vw;
+      transition: padding .4s, background .4s, border-color .4s, box-shadow .4s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      padding: 18px 6vw;
+      background: rgba(245,242,236,.92);
+      backdrop-filter: blur(16px);
+      border-color: var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.5rem; letter-spacing: .04em;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: .75rem; letter-spacing: .15em; text-transform: uppercase;
+      font-weight: 500; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+      font-weight: 500; padding: 10px 24px;
+      background: var(--text); color: var(--bg);
+      text-decoration: none; border-radius: var(--r);
+      transition: background .2s, transform .2s;
+    }
+    .nav-cta:hover { background: var(--accent); transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    #inicio {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding: 0 6vw;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-main {
+      display: flex; flex-direction: column;
+      justify-content: flex-end; padding-bottom: 6vh;
+      padding-top: 120px;
+    }
+
+    /* Subtle noise texture */
+    #inicio::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: .5; pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 28px;
+      position: relative; z-index: 1;
+      opacity: 0; animation: fadeUp .7s .2s forwards;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block; width: 32px; height: 1px; background: var(--accent);
+    }
+
+    .hero-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(4rem, 9.5vw, 10rem);
+      font-weight: 400; line-height: .92;
+      position: relative; z-index: 1;
+      opacity: 0; animation: fadeUp .9s .4s forwards;
+      letter-spacing: -.02em;
+    }
+    .hero-title em {
+      font-style: italic; color: var(--accent);
+    }
+    .hero-title .outline {
+      -webkit-text-stroke: 1.5px var(--text);
+      color: transparent;
+    }
+
+    .hero-bottom {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 40px;
+      padding-bottom: 8vh; position: relative; z-index: 1;
+      opacity: 0; animation: fadeUp .8s .75s forwards;
+    }
+
+    .hero-sub {
+      max-width: 380px; color: var(--muted);
+      font-size: .92rem; line-height: 1.75;
+    }
+
+    .hero-actions { display: flex; gap: 14px; flex-shrink: 0; }
+    .btn-primary {
+      padding: 14px 32px; background: var(--text);
+      color: var(--bg); font-size: .78rem; letter-spacing: .1em;
+      text-transform: uppercase; text-decoration: none;
+      border-radius: var(--r); font-weight: 500;
+      transition: background .2s, transform .2s;
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+    .btn-ghost {
+      padding: 14px 32px; border: 1.5px solid var(--text);
+      color: var(--text); font-size: .78rem; letter-spacing: .1em;
+      text-transform: uppercase; text-decoration: none;
+      border-radius: var(--r); font-weight: 500;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* TICKER / MARQUEE */
+    .ticker {
+      overflow: hidden; border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0; background: var(--bg-ink);
+      white-space: nowrap; position: relative; z-index: 1;
+    }
+    .ticker-track {
+      display: inline-flex; gap: 0;
+      animation: ticker 20s linear infinite;
+    }
+    .ticker-item {
+      font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(245,242,236,.5); padding: 0 40px;
+    }
+    .ticker-item span { color: var(--accent); margin-right: 40px; }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 120px 6vw; }
+    .section-label {
+      font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 16px; font-weight: 500;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+    .section-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-weight: 400; line-height: 1.02;
+      letter-spacing: -.02em;
+    }
+    .section-title em { font-style: italic; color: var(--accent); }
+
+    /* ── SERVICIOS ── */
+    #servicios { background: var(--bg-ink); color: #f5f2ec; }
+    #servicios .section-label { color: var(--accent); }
+    #servicios .section-label::before { background: var(--accent); }
+    #servicios .section-title { color: #f5f2ec; }
+
+    .services-head {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 40px;
+      margin-bottom: 72px; flex-wrap: wrap;
+    }
+    .services-head p { max-width: 340px; color: rgba(245,242,236,.55); font-size: .9rem; line-height: 1.75; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: rgba(245,242,236,.08);
+      border: 1px solid rgba(245,242,236,.08); border-radius: 4px; overflow: hidden;
+    }
+    .service-card {
+      background: var(--bg-ink); padding: 44px 32px 40px;
+      transition: background .3s; position: relative; overflow: hidden;
+      cursor: default;
+    }
+    .service-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .4s cubic-bezier(.16,1,.3,1);
+    }
+    .service-card:hover { background: #161616; }
+    .service-card:hover::after { transform: scaleX(1); }
+
+    .service-num {
+      font-family: 'Instrument Serif', serif;
+      font-size: 3rem; color: rgba(245,242,236,.1);
+      line-height: 1; margin-bottom: 28px;
+    }
+    .service-name {
+      font-size: .95rem; font-weight: 600;
+      color: #f5f2ec; letter-spacing: .03em; margin-bottom: 14px;
+    }
+    .service-desc { font-size: .84rem; color: rgba(245,242,236,.45); line-height: 1.72; }
+
+    /* ── TRABAJOS ── */
+    #trabajos { background: var(--bg); }
+    .works-header {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; margin-bottom: 64px; gap: 40px;
+    }
+    .works-header a {
+      font-size: .75rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; font-weight: 500;
+      border-bottom: 1px solid var(--border); padding-bottom: 3px;
+      transition: color .2s, border-color .2s; flex-shrink: 0;
+    }
+    .works-header a:hover { color: var(--accent); border-color: var(--accent); }
+
+    .works-list { display: flex; flex-direction: column; gap: 2px; }
+
+    .work-row {
+      display: grid; grid-template-columns: 80px 1fr 2fr auto;
+      align-items: center; gap: 40px;
+      padding: 28px 0; border-bottom: 1px solid var(--border);
+      cursor: pointer; position: relative; overflow: hidden;
+      transition: background .3s; border-radius: var(--r);
+      text-decoration: none; color: inherit;
+    }
+    .work-row:first-child { border-top: 1px solid var(--border); }
+    .work-row:hover { background: var(--bg2); padding-left: 20px; padding-right: 20px; }
+
+    .work-row-num {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.1rem; color: var(--muted); font-style: italic;
+    }
+    .work-row-info {}
+    .work-row-tag {
+      font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 6px; font-weight: 500;
+    }
+    .work-row-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.9rem; font-weight: 400; line-height: 1.1;
+      letter-spacing: -.01em;
+    }
+    .work-row-desc {
+      font-size: .86rem; color: var(--muted); line-height: 1.65; max-width: 460px;
+    }
+    .work-row-arrow {
+      font-size: 1.4rem; color: var(--muted);
+      transition: color .2s, transform .2s;
+    }
+    .work-row:hover .work-row-arrow { color: var(--accent); transform: translate(4px, -4px); }
+
+    /* Hover image preview */
+    .work-preview {
+      position: fixed; pointer-events: none; z-index: 50;
+      width: 320px; aspect-ratio: 16/10; border-radius: 4px;
+      overflow: hidden; opacity: 0; transform: scale(.92);
+      transition: opacity .3s, transform .3s; box-shadow: 0 24px 80px rgba(0,0,0,.18);
+    }
+    .work-preview img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+    .work-preview.visible { opacity: 1; transform: scale(1); }
+
+    /* ── PROCESO ── */
+    #proceso { background: var(--bg2); }
+    .proceso-inner {
+      display: grid; grid-template-columns: 5fr 7fr; gap: 100px; align-items: start;
+    }
+    .proceso-sticky { position: sticky; top: 120px; }
+    .proceso-sticky p { color: var(--muted); margin-top: 24px; font-size: .9rem; line-height: 1.8; max-width: 380px; }
+
+    .steps { display: flex; flex-direction: column; }
+    .step {
+      display: grid; grid-template-columns: 56px 1fr;
+      gap: 28px; padding: 36px 0; border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+    .step:first-child { border-top: 1px solid var(--border); }
+    .step-num {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.6rem; color: var(--accent); font-style: italic; line-height: 1;
+      padding-top: 2px;
+    }
+    .step h3 { font-size: .95rem; font-weight: 600; margin-bottom: 10px; letter-spacing: .02em; }
+    .step p { color: var(--muted); font-size: .86rem; line-height: 1.72; }
+
+    /* ── CONTACTO ── */
+    #contacto { background: var(--bg); }
+    .contact-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: start;
+    }
+
+    .contact-left {}
+    .contact-left h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.8rem, 5vw, 5rem); font-weight: 400; line-height: .96;
+      letter-spacing: -.02em; margin-bottom: 28px;
+    }
+    .contact-left h2 em { font-style: italic; color: var(--accent); }
+    .contact-left > p { color: var(--muted); font-size: .92rem; line-height: 1.78; max-width: 360px; }
+
+    .contact-links { margin-top: 52px; display: flex; flex-direction: column; gap: 0; }
+    .contact-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0; border-bottom: 1px solid var(--border);
+      text-decoration: none; color: var(--text);
+      transition: padding-left .3s;
+    }
+    .contact-link:first-child { border-top: 1px solid var(--border); }
+    .contact-link:hover { padding-left: 12px; }
+    .contact-link:hover .cl-label { color: var(--accent); }
+    .contact-link:hover .cl-arrow { color: var(--accent); transform: translate(4px,-4px); }
+    .cl-meta { display: flex; flex-direction: column; }
+    .cl-type { font-size: .65rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+    .cl-label { font-size: .95rem; font-weight: 500; transition: color .2s; }
+    .cl-arrow { font-size: 1.1rem; color: var(--muted); transition: color .2s, transform .2s; }
+
+    .contact-form {
+      background: var(--bg-ink); color: #f5f2ec;
+      border-radius: 6px; padding: 48px;
+    }
+    .form-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.5rem; margin-bottom: 32px; font-style: italic; color: #f5f2ec;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .fg { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+    .fg label { font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: rgba(245,242,236,.4); font-weight: 500; }
+    .fg input, .fg textarea, .fg select {
+      background: rgba(245,242,236,.06); border: 1px solid rgba(245,242,236,.12);
+      border-radius: var(--r); padding: 13px 16px;
+      color: #f5f2ec; font-family: 'Syne', sans-serif;
+      font-size: .88rem; font-weight: 400; outline: none;
+      transition: border-color .25s, background .25s;
+      appearance: none;
+    }
+    .fg input:focus, .fg textarea:focus, .fg select:focus {
+      border-color: var(--accent); background: rgba(245,242,236,.09);
+    }
+    .fg input::placeholder, .fg textarea::placeholder { color: rgba(245,242,236,.25); }
+    .fg textarea { resize: vertical; min-height: 110px; }
+    .fg select option { background: #1a1a1a; }
+    .form-submit {
+      width: 100%; padding: 15px;
+      background: var(--accent); color: #fff;
+      font-family: 'Syne', sans-serif; font-size: .8rem;
+      letter-spacing: .12em; text-transform: uppercase; font-weight: 600;
+      border: none; border-radius: var(--r); cursor: pointer;
+      margin-top: 6px;
+      transition: opacity .2s, transform .2s;
+    }
+    .form-submit:hover { opacity: .88; transform: translateY(-1px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg-ink); color: rgba(245,242,236,.35);
+      padding: 40px 6vw;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+      border-top: 1px solid rgba(245,242,236,.06);
+    }
+    .footer-logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.3rem; color: #f5f2ec; text-decoration: none; letter-spacing: .04em;
+    }
+    .footer-logo span { color: var(--accent); }
+    footer p { font-size: .76rem; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+    .reveal.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: .08s; }
+    .d2 { transition-delay: .16s; }
+    .d3 { transition-delay: .24s; }
+    .d4 { transition-delay: .32s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1100px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .proceso-inner { grid-template-columns: 1fr; gap: 52px; }
+      .proceso-sticky { position: static; }
+      .contact-inner { grid-template-columns: 1fr; gap: 52px; }
+      .work-row { grid-template-columns: 48px 1fr auto; }
+      .work-row-desc { display: none; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hero-title { font-size: clamp(3.2rem, 14vw, 5rem); }
+      .hero-bottom { flex-direction: column; align-items: flex-start; }
+      .services-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .works-header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Work image preview on hover -->
+  <div class="work-preview" id="workPreview">
+    <img id="previewImg" src="" alt="" />
+  </div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#inicio" class="nav-logo">Elev<span>on</span></a>
+    <ul class="nav-links">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#trabajos">Trabajos</a></li>
+      <li><a href="#proceso">Proceso</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <a href="#contacto" class="nav-cta">Solicitar proyecto</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="inicio">
+    <div class="hero-main">
+      <p class="hero-eyebrow">Estudio de diseño web · Valladolid</p>
+      <h1 class="hero-title">
+        Webs que<br>
+        <em>elevan</em><br>
+        tu <span class="outline">negocio.</span>
+      </h1>
+    </div>
+    <div class="hero-bottom">
+      <p class="hero-sub">
+        Diseñamos y desarrollamos páginas web a medida para negocios que quieren 
+        destacar. Cada proyecto es único. Cada detalle, pensado.
+      </p>
+      <div class="hero-actions">
+        <a href="#trabajos" class="btn-primary">Ver trabajos</a>
+        <a href="#contacto" class="btn-ghost">Hablemos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track" id="tickerTrack">
+      <span class="ticker-item">Diseño web <span>✦</span></span>
+      <span class="ticker-item">Branding <span>✦</span></span>
+      <span class="ticker-item">SEO & Rendimiento <span>✦</span></span>
+      <span class="ticker-item">Desarrollo a medida <span>✦</span></span>
+      <span class="ticker-item">Identidad visual <span>✦</span></span>
+      <span class="ticker-item">Mantenimiento <span>✦</span></span>
+      <span class="ticker-item">Diseño web <span>✦</span></span>
+      <span class="ticker-item">Branding <span>✦</span></span>
+      <span class="ticker-item">SEO & Rendimiento <span>✦</span></span>
+      <span class="ticker-item">Desarrollo a medida <span>✦</span></span>
+      <span class="ticker-item">Identidad visual <span>✦</span></span>
+      <span class="ticker-item">Mantenimiento <span>✦</span></span>
+    </div>
+  </div>
+
+  <!-- SERVICIOS -->
+  <section id="servicios">
+    <div class="services-head reveal">
+      <div>
+        <p class="section-label">Lo que hacemos</p>
+        <h2 class="section-title" style="color:#f5f2ec;">Diseño web que<br><em>convierte</em></h2>
+      </div>
+      <p>Sin plantillas. Sin atajos.<br>Cada web, construida desde cero<br>para el negocio que la necesita.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal d1">
+        <div class="service-num">01</div>
+        <h3 class="service-name">Diseño & Desarrollo Web</h3>
+        <p class="service-desc">Sitios a medida, rápidos, accesibles y optimizados para todos los dispositivos. Sin plantillas genéricas.</p>
+      </div>
+      <div class="service-card reveal d2">
+        <div class="service-num">02</div>
+        <h3 class="service-name">Identidad Visual</h3>
+        <p class="service-desc">Logotipo, paleta de colores y tipografía que comunican la esencia de tu marca de forma coherente.</p>
+      </div>
+      <div class="service-card reveal d3">
+        <div class="service-num">03</div>
+        <h3 class="service-name">SEO & Rendimiento</h3>
+        <p class="service-desc">Código limpio y estrategia de posicionamiento para que Google te encuentre antes que a tu competencia.</p>
+      </div>
+      <div class="service-card reveal d4">
+        <div class="service-num">04</div>
+        <h3 class="service-name">Mantenimiento</h3>
+        <p class="service-desc">Actualizaciones, copias de seguridad y soporte continuo para que tu web funcione siempre a pleno rendimiento.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRABAJOS -->
+  <section id="trabajos">
+    <div class="works-header reveal">
+      <div>
+        <p class="section-label">Proyectos</p>
+        <h2 class="section-title">Últimos <em>trabajos</em></h2>
+      </div>
+      <a href="#contacto">Iniciar proyecto →</a>
+    </div>
+
+    <div class="works-list">
+      <a class="work-row reveal d1"
+        href="https://fisiosuab.vercel.app/" target="_blank" rel="noopener"
+        data-img="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=640&q=80&auto=format&fit=crop">
+        <span class="work-row-num">01</span>
+        <div class="work-row-info">
+          <p class="work-row-tag">Clínica · Valladolid</p>
+          <h3 class="work-row-title">FisioSUAB</h3>
+        </div>
+        <p class="work-row-desc">Web premium para clínica de fisioterapia especializada en suelo pélvico y rehabilitación integral. Diseño elegante, reserva de citas y SEO local.</p>
+        <span class="work-row-arrow">↗</span>
+      </a>
+
+      <a class="work-row reveal d2"
+        href="https://meson-oriental.vercel.app/" target="_blank" rel="noopener"
+        data-img="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=640&q=80&auto=format&fit=crop">
+        <span class="work-row-num">02</span>
+        <div class="work-row-info">
+          <p class="work-row-tag">Restaurante · Rueda, Valladolid</p>
+          <h3 class="work-row-title">Asador Mesón Oriental</h3>
+        </div>
+        <p class="work-row-desc">Sitio web para asador castellano tradicional. Carta digital, atmósfera visual auténtica y diseño pensado para atraer reservas.</p>
+        <span class="work-row-arrow">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section id="proceso">
+    <div class="proceso-inner">
+      <div class="proceso-sticky reveal">
+        <p class="section-label">Cómo trabajamos</p>
+        <h2 class="section-title">Un proceso<br><em>sin sorpresas</em></h2>
+        <p>Desde la primera llamada hasta el lanzamiento, sabemos exactamente qué viene después. Claridad total en cada paso.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal d1">
+          <span class="step-num">01</span>
+          <div>
+            <h3>Reunión inicial</h3>
+            <p>Escuchamos tu proyecto, tus objetivos y a quién va dirigido. Una conversación sin compromiso para entender qué necesitas.</p>
+          </div>
+        </div>
+        <div class="step reveal d2">
+          <span class="step-num">02</span>
+          <div>
+            <h3>Propuesta & presupuesto</h3>
+            <p>Te presentamos un plan detallado: diseño, funcionalidades, plazos y precio cerrado. Sin letras pequeñas.</p>
+          </div>
+        </div>
+        <div class="step reveal d3">
+          <span class="step-num">03</span>
+          <div>
+            <h3>Diseño & desarrollo</h3>
+            <p>Construimos tu web con revisiones periódicas para que siempre tengas el control del resultado.</p>
+          </div>
+        </div>
+        <div class="step reveal d4">
+          <span class="step-num">04</span>
+          <div>
+            <h3>Lanzamiento & soporte</h3>
+            <p>Publicamos la web, te entregamos todo y seguimos disponibles para cualquier ajuste o actualización.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto">
+    <div class="contact-inner">
+      <div class="contact-left reveal">
+        <h2>¿Tienes un<br><em>proyecto</em><br>en mente?</h2>
+        <p>Cuéntanos en qué consiste. Respondemos en menos de 24 horas y la primera consulta es siempre gratuita.</p>
+        <div class="contact-links">
+          <a href="mailto:elevongroup@hotmail.com" class="contact-link">
+            <div class="cl-meta">
+              <span class="cl-type">Email</span>
+              <span class="cl-label">elevongroup@hotmail.com</span>
+            </div>
+            <span class="cl-arrow">↗</span>
+          </a>
+          <a href="tel:+34600000000" class="contact-link">
+            <div class="cl-meta">
+              <span class="cl-type">Teléfono</span>
+              <span class="cl-label">+34 600 000 000</span>
+            </div>
+            <span class="cl-arrow">↗</span>
+          </a>
+          <a href="#" class="contact-link">
+            <div class="cl-meta">
+              <span class="cl-type">Instagram</span>
+              <span class="cl-label">@elevon.studio</span>
+            </div>
+            <span class="cl-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-form reveal d2">
+        <p class="form-title">Cuéntanos tu proyecto</p>
+        <div class="form-row">
+          <div class="fg">
+            <label>Nombre</label>
+            <input type="text" placeholder="Tu nombre" />
+          </div>
+          <div class="fg">
+            <label>Email</label>
+            <input type="email" placeholder="tu@email.com" />
+          </div>
+        </div>
+        <div class="fg">
+          <label>Tipo de proyecto</label>
+          <select>
+            <option value="" disabled selected>Selecciona una opción</option>
+            <option>Web de empresa / negocio</option>
+            <option>Restaurante / Hostelería</option>
+            <option>Clínica / Salud</option>
+            <option>Tienda online</option>
+            <option>Portfolio / Personal</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Cuéntame tu proyecto</label>
+          <textarea placeholder="Describe brevemente qué necesitas, en qué plazo y cualquier detalle relevante…"></textarea>
+        </div>
+        <button class="form-submit" onclick="handleSubmit(this)">Enviar mensaje →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="#inicio" class="footer-logo">Elev<span>on</span></a>
+    <p>© 2025 Elevon Studio · Valladolid, España</p>
+    <p>Diseño web premium · Hecho con intención</p>
+  </footer>
+
+  <script>
+    // ── Cursor ──
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let mx = -200, my = -200, rx = -200, ry = -200;
+
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    (function loop() {
+      rx += (mx - rx) * .16; ry += (my - ry) * .16;
+      cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+      ring.style.left   = rx + 'px'; ring.style.top  = ry + 'px';
+      requestAnimationFrame(loop);
+    })();
+
+    document.querySelectorAll('a, button, .service-card').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+      el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+    });
+
+    // ── Nav scroll ──
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 50));
+
+    // ── Reveal ──
+    new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); } });
+    }, { threshold: .1 }).observe && document.querySelectorAll('.reveal').forEach(el =>
+      new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); } });
+      }, { threshold: .1 }).observe(el)
+    );
+
+    // ── Work preview on hover ──
+    const preview   = document.getElementById('workPreview');
+    const previewImg = document.getElementById('previewImg');
+
+    document.querySelectorAll('.work-row').forEach(row => {
+      row.addEventListener('mouseenter', e => {
+        const imgSrc = row.dataset.img;
+        if (imgSrc) { previewImg.src = imgSrc; preview.classList.add('visible'); }
+      });
+      row.addEventListener('mousemove', e => {
+        preview.style.left = (e.clientX + 28) + 'px';
+        preview.style.top  = (e.clientY - 80) + 'px';
+      });
+      row.addEventListener('mouseleave', () => preview.classList.remove('visible'));
+    });
+
+    // ── Form submit ──
+    function handleSubmit(btn) {
+      btn.textContent = '✓ Mensaje enviado — te contactamos pronto';
+      btn.style.background = '#1a7a3a';
+      btn.disabled = true;
+    }
+  </script>
+</body>
+</html>
