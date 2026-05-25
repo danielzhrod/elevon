@@ -42,7 +42,7 @@ export function Proceso() {
             <div style={{
               fontFamily: "'Instrument Serif', serif",
               fontSize: '5rem', fontWeight: 400, lineHeight: 1,
-              color: 'rgba(13,13,13,.07)',
+              color: 'rgba(13,13,13,.18)',
               marginBottom: '28px',
               letterSpacing: '-.02em'
             }}>{s.num}</div>
