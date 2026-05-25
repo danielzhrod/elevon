@@ -13,21 +13,20 @@ const SERVICES = [
 const STATS = [
   {
     label: 'Primera consulta siempre gratuita',
-    render: () => <span style={{ color: 'var(--accent)', fontStyle: 'italic' }}>1ª</span>
+    render: () => <span className="accent" style={{ fontStyle: 'italic' }}>1ª</span>
   },
   {
     label: 'Tiempo de respuesta garantizado',
-    countFrom: null,
-    render: (val) => <><span style={{ color: 'var(--accent)' }}>24</span><span style={{ color: 'var(--accent)' }}>h</span></>
+    render: () => <><span>24</span><span>h</span></>
   },
   {
     label: 'De idea a web publicada',
     countdown: true, countFrom: 6, countTo: 3,
     render: (val) => (
       <>
-        <span style={{ color: 'var(--text)' }}>&lt;</span>
-        <span style={{ color: 'var(--accent)' }}>{val}</span>
-        <span style={{ color: 'var(--accent)', fontSize: 'clamp(1.2rem,1.8vw,1.8rem)', marginLeft: '4px' }}>sem</span>
+        <span className="accent" style={{ fontStyle: 'italic' }}>&lt;</span>
+        <span>{val}</span>
+        <span style={{ fontSize: 'clamp(1.2rem,1.8vw,1.8rem)', marginLeft: '4px' }}>sem</span>
       </>
     )
   },
@@ -36,8 +35,8 @@ const STATS = [
     countUp: true, countTo: 100,
     render: (val) => (
       <>
-        <span style={{ color: 'var(--accent)' }}>{val}</span>
-        <span style={{ color: 'var(--text)' }}>%</span>
+        <span>{val}</span>
+        <span className="accent" style={{ fontStyle: 'italic' }}>%</span>
       </>
     )
   },
