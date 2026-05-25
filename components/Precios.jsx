@@ -40,7 +40,7 @@ export default function Precios() {
       valor: <>1.250<em>€</em></>,
       items: [
         'Todo lo incluido en el Paquete Web Profesional',
-        'Automatización de clientes potenciales',
+        'Chatbot con IA + automatización de clientes potenciales',
         'Integración de WhatsApp API / Email Automation',
         'Sistema de reserva de citas y presupuestos online',
         'Formación incluida: sesión de 1h por videollamada para gestionar tu sistema',
