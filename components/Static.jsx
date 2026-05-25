@@ -1,3 +1,5 @@
+'use client';
+
 export function Ticker() {
   const items = ['Diseño web', 'Branding', 'SEO & Rendimiento', 'Desarrollo a medida', 'Identidad visual', 'Mantenimiento'];
   const doubled = [...items, ...items];
