@@ -1,8 +1,54 @@
 export default function Precios() {
   const plans = [
-    { valor: <>390<em>€</em></>,   badge: 'Starter',     nombre: 'Web Esencial',         desde: 'Único pago',                          items: [ 'Diseño a medida (hasta 4 secciones)', 'Adaptado a móvil y tablet', 'Formulario de contacto funcional', 'SEO básico incluido', 'Entrega en menos de 2 semanas', ], cta: 'Solicitar presupuesto', featured: false, },
-    { valor: <>550<em>€</em></>,   badge: 'Más popular', nombre: 'Web Profesional',      desde: 'Único pago · Pago fraccionado',       items: [ 'Diseño premium a medida', 'Hasta 8 secciones / páginas', 'Sistema de citas o reservas', 'SEO local avanzado', 'Animaciones y microinteracciones', 'Entrega en menos de 3 semanas', ], cta: 'Solicitar presupuesto', featured: true, },
-    { valor: <>1.250<em>€</em></>, badge: 'Completo',    nombre: 'Web + Automatización', desde: 'Único pago · Pago fraccionado',       items: [ 'Todo lo del plan Profesional', 'Chatbot con IA integrado', 'Branding y guía de marca', 'Google Analytics configurado', 'Mantenimiento 3 meses incluido', 'Soporte prioritario', ], cta: 'Solicitar presupuesto', featured: false, },
+    {
+      badge: 'Starter',
+      nombre: 'Web Esencial',
+      desde: 'Único pago',
+      valor: <>390<em>€</em></>,
+      items: [
+        'Estructura One-Page con secciones desplazables (Inicio, Sobre mí, Contacto)',
+        'Diseño con plantilla adaptada a tus colores corporativos y logotipo',
+        '100% responsive para móvil y tablet',
+        'Formulario de contacto enlazado a tu correo',
+        'Enlaces a redes sociales y mapa de Google',
+      ],
+      cta: 'Solicitar presupuesto',
+      featured: false,
+    },
+    {
+      badge: 'Más popular',
+      nombre: 'Web Profesional',
+      desde: 'Único pago · Pago fraccionado',
+      valor: <>550<em>€</em></>,
+      items: [
+        'Multi-página hasta 5 secciones independientes (Inicio, Servicios, Sobre Nosotros, Blog y Contacto)',
+        'Diseño 100% personalizado a la identidad de tu marca',
+        'Estructura estratégica de conversión para conseguir llamadas y presupuestos',
+        'SEO local básico para aparecer correctamente en Google',
+        'Revisión y optimización de textos (Copywriting)',
+        'Sistema de reserva de citas integrado',
+        'Botón de WhatsApp directo para contacto con un clic',
+        '15 días de soporte técnico gratuito tras la entrega',
+      ],
+      cta: 'Solicitar presupuesto',
+      featured: true,
+    },
+    {
+      badge: 'Completo',
+      nombre: 'Web + Automatización',
+      desde: 'Único pago · Pago fraccionado',
+      valor: <>1.250<em>€</em></>,
+      items: [
+        'Todo lo incluido en el Paquete Web Profesional',
+        'Automatización de clientes potenciales',
+        'Integración de WhatsApp API / Email Automation',
+        'Sistema de reserva de citas y presupuestos online',
+        'Formación incluida: sesión de 1h por videollamada para gestionar tu sistema',
+        '2 meses de soporte técnico gratuito',
+      ],
+      cta: 'Solicitar presupuesto',
+      featured: false,
+    },
   ];
 
   return (
