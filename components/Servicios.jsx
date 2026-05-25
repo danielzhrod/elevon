@@ -11,31 +11,61 @@ const SERVICES = [
 ];
 
 const STATS = [
-  { value: null, prefix: '<', suffix: ' sem', label: 'De idea a web publicada', fixed: '3' },
-  { value: 24,   prefix: '',  suffix: 'h',    label: 'Tiempo de respuesta garantizado' },
-  { value: 100,  prefix: '',  suffix: '%',    label: 'Webs hechas a medida, sin plantillas', accentSuffix: true },
-  { value: null, prefix: '',  suffix: '',     label: 'Consulta siempre gratuita', fixed: '1ª', accentFixed: true },
+  {
+    label: 'Primera consulta siempre gratuita',
+    render: () => <span style={{ color: 'var(--accent)', fontStyle: 'italic' }}>1ª</span>
+  },
+  {
+    label: 'Tiempo de respuesta garantizado',
+    countFrom: null,
+    render: (val) => <><span style={{ color: 'var(--accent)' }}>24</span><span style={{ color: 'var(--accent)' }}>h</span></>
+  },
+  {
+    label: 'De idea a web publicada',
+    countdown: true, countFrom: 6, countTo: 3,
+    render: (val) => (
+      <>
+        <span style={{ color: 'var(--text)' }}>&lt;</span>
+        <span style={{ color: 'var(--accent)' }}>{val}</span>
+        <span style={{ color: 'var(--accent)', fontSize: 'clamp(1.2rem,1.8vw,1.8rem)', marginLeft: '4px' }}>sem</span>
+      </>
+    )
+  },
+  {
+    label: 'Webs hechas a medida, sin plantillas',
+    countUp: true, countTo: 100,
+    render: (val) => (
+      <>
+        <span style={{ color: 'var(--accent)' }}>{val}</span>
+        <span style={{ color: 'var(--text)' }}>%</span>
+      </>
+    )
+  },
 ];
 
-function CountUp({ target }) {
-  const [val, setVal] = useState(0);
+function AnimatedNum({ from, to, countdown }) {
+  const [val, setVal] = useState(from !== undefined ? from : 0);
   const ref = useRef(null);
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => {
       if (!e.isIntersecting) return;
-      let cur = 0;
-      const steps = 1400 / 16;
-      const inc   = target / steps;
+      const start = from !== undefined ? from : 0;
+      const end   = to;
+      const dur   = 1600;
+      const steps = dur / 16;
+      const inc   = (end - start) / steps;
+      let cur = start;
       const t = setInterval(() => {
-        cur = Math.min(cur + inc, target);
-        setVal(Math.floor(cur));
-        if (cur >= target) clearInterval(t);
+        cur += inc;
+        const done = countdown ? cur <= end : cur >= end;
+        if (done) { setVal(end); clearInterval(t); }
+        else setVal(Math.round(cur));
       }, 16);
       obs.unobserve(ref.current);
     }, { threshold: .5 });
     obs.observe(ref.current);
     return () => obs.disconnect();
-  }, [target]);
+  }, [from, to, countdown]);
   return <span ref={ref}>{val}</span>;
 }
 
@@ -66,12 +96,12 @@ export default function Servicios() {
             {STATS.map((s, i) => (
               <div className="clay-stat" key={i}>
                 <div className="clay-stat-num">
-                  {s.prefix && <span className="accent">{s.prefix}</span>}
-                  {s.fixed
-                    ? <span className={s.accentFixed ? 'accent' : ''}>{s.fixed}</span>
-                    : <CountUp target={s.value} />
+                  {s.countdown
+                    ? s.render(<AnimatedNum from={s.countFrom} to={s.countTo} countdown={true} />)
+                    : s.countUp
+                      ? s.render(<AnimatedNum from={0} to={s.countTo} countdown={false} />)
+                      : s.render()
                   }
-                  {s.suffix && <span className={s.accentSuffix ? 'accent' : ''}>{s.suffix}</span>}
                 </div>
                 <div className="clay-stat-label">{s.label}</div>
               </div>
