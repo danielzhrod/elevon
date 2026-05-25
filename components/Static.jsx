@@ -20,24 +20,52 @@ export function Proceso() {
     { num: '04', title: 'Lanzamiento & soporte', desc: 'Publicamos la web, te entregamos todo y seguimos disponibles para cualquier ajuste o actualización.' },
   ];
   return (
-    <section id="proceso">
-      <div className="proceso-inner">
-        <div className="proceso-sticky reveal">
-          <p className="section-label">Cómo trabajamos</p>
-          <h2 className="section-title">Un proceso<br /><em>sin sorpresas</em></h2>
-          <p>Desde la primera llamada hasta el lanzamiento, sabemos exactamente qué viene después. Claridad total en cada paso.</p>
-        </div>
-        <div className="steps">
-          {steps.map((s, i) => (
-            <div className={`step reveal d${i + 1}`} key={s.num}>
-              <span className="step-num">{s.num}</span>
-              <div>
-                <h3>{s.title}</h3>
-                <p>{s.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+    <section id="proceso" style={{ background: 'var(--bg2)', padding: '120px 6vw' }}>
+      <div className="reveal" style={{ marginBottom: '72px' }}>
+        <p className="section-label">Cómo trabajamos</p>
+        <h2 className="section-title">Un proceso<br /><em>sin sorpresas</em></h2>
+        <p style={{ color: 'var(--muted)', marginTop: '20px', fontSize: '1rem', lineHeight: 1.7, maxWidth: '480px' }}>
+          Desde la primera llamada hasta el lanzamiento, sabemos exactamente qué viene después.
+        </p>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2px', background: 'var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
+        {steps.map((s, i) => (
+          <div
+            key={s.num}
+            className={`reveal d${i + 1}`}
+            style={{ background: 'var(--bg2)', padding: '48px 36px', position: 'relative', transition: 'background .3s' }}
+            onMouseEnter={e => e.currentTarget.style.background = 'var(--bg)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'var(--bg2)'}
+          >
+            <div style={{
+              fontFamily: "'Instrument Serif', serif",
+              fontSize: '5rem', fontWeight: 400, lineHeight: 1,
+              color: 'rgba(13,13,13,.07)',
+              marginBottom: '28px',
+              letterSpacing: '-.02em'
+            }}>{s.num}</div>
+            <div style={{
+              width: '32px', height: '2px',
+              background: 'var(--accent)',
+              marginBottom: '20px'
+            }} />
+            <h3 style={{
+              fontFamily: "'Instrument Serif', serif",
+              fontSize: 'clamp(1.5rem, 2.2vw, 2rem)',
+              fontWeight: 400,
+              marginBottom: '16px',
+              lineHeight: 1.1,
+              letterSpacing: '-.01em'
+            }}>{s.title}</h3>
+            <p style={{
+              color: 'var(--muted)',
+              fontSize: '1rem',
+              lineHeight: 1.72,
+              fontFamily: "'Syne', sans-serif",
+              fontWeight: 300
+            }}>{s.desc}</p>
+          </div>
+        ))}
       </div>
     </section>
   );
