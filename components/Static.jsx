@@ -50,11 +50,11 @@ export function Proceso() {
               marginBottom: '20px'
             }} />
             <h3 style={{
-              fontFamily: "'Instrument Serif', serif",
-              fontSize: 'clamp(1.5rem, 2.2vw, 2rem)',
-              fontWeight: 400,
+              fontFamily: "'Syne', sans-serif",
+              fontSize: 'clamp(1.3rem, 2vw, 1.7rem)',
+              fontWeight: 700,
               marginBottom: '16px',
-              lineHeight: 1.1,
+              lineHeight: 1.15,
               letterSpacing: '-.01em'
             }}>{s.title}</h3>
             <p style={{
