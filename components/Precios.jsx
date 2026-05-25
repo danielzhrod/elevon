@@ -1,52 +1,8 @@
 export default function Precios() {
   const plans = [
-    {
-      badge: 'Starter',
-      nombre: 'Web Esencial',
-      desde: 'Desde',
-      valor: <>300<em>€</em></>,
-      items: [
-        'Diseño a medida (hasta 4 secciones)',
-        'Adaptado a móvil y tablet',
-        'Formulario de contacto funcional',
-        'SEO básico incluido',
-        'Entrega en menos de 2 semanas',
-      ],
-      cta: 'Solicitar presupuesto',
-      featured: false,
-    },
-    {
-      badge: 'Más popular',
-      nombre: 'Web Profesional',
-      desde: 'Desde',
-      valor: <>800<em>€</em></>,
-      items: [
-        'Diseño premium a medida',
-        'Hasta 8 secciones / páginas',
-        'Sistema de citas o reservas',
-        'SEO local avanzado',
-        'Animaciones y microinteracciones',
-        'Entrega en menos de 3 semanas',
-      ],
-      cta: 'Solicitar presupuesto',
-      featured: true,
-    },
-    {
-      badge: 'Completo',
-      nombre: 'Web + Automatización',
-      desde: 'Desde',
-      valor: <>1.500<em>€</em></>,
-      items: [
-        'Todo lo del plan Profesional',
-        'Chatbot con IA integrado',
-        'Branding y guía de marca',
-        'Google Analytics configurado',
-        'Mantenimiento 3 meses incluido',
-        'Soporte prioritario',
-      ],
-      cta: 'Solicitar presupuesto',
-      featured: false,
-    },
+    { valor: <>390<em>€</em></>,  badge: 'Starter',      nombre: 'Web Esencial',         desde: 'Desde', items: [ 'Diseño a medida (hasta 4 secciones)', 'Adaptado a móvil y tablet', 'Formulario de contacto funcional', 'SEO básico incluido', 'Entrega en menos de 2 semanas', ], cta: 'Solicitar presupuesto', featured: false, },
+    { valor: <>550<em>€</em></>,  badge: 'Más popular',  nombre: 'Web Profesional',      desde: 'Desde', items: [ 'Diseño premium a medida', 'Hasta 8 secciones / páginas', 'Sistema de citas o reservas', 'SEO local avanzado', 'Animaciones y microinteracciones', 'Entrega en menos de 3 semanas', ], cta: 'Solicitar presupuesto', featured: true, },
+    { valor: <>1.250<em>€</em></>,badge: 'Completo',     nombre: 'Web + Automatización', desde: 'Desde', items: [ 'Todo lo del plan Profesional', 'Chatbot con IA integrado', 'Branding y guía de marca', 'Google Analytics configurado', 'Mantenimiento 3 meses incluido', 'Soporte prioritario', ], cta: 'Solicitar presupuesto', featured: false, },
   ];
 
   return (
