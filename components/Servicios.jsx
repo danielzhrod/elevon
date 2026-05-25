@@ -20,7 +20,7 @@ const STATS = [
     render: () => <><span>24</span><span>h</span></>
   },
   {
-    label: 'De idea a web publicada',
+    label: 'Entrega de web',
     countdown: true, countFrom: 6, countTo: 3,
     render: (val) => (
       <>
