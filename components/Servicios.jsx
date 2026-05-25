@@ -31,7 +31,7 @@ const STATS = [
     )
   },
   {
-    label: 'Webs hechas a medida, sin plantillas',
+    label: 'Personalizable a tu gusto',
     countUp: true, countTo: 100,
     render: (val) => (
       <>
