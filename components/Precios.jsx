@@ -21,12 +21,11 @@ export default function Precios() {
       desde: 'Único pago · Pago fraccionado',
       valor: <>550<em>€</em></>,
       items: [
-        'Multi-página hasta 5 secciones independientes (Inicio, Servicios, Sobre Nosotros, Contacto...)',
+        'Multi-página con secciones independientes (Inicio, Servicios, Sobre Nosotros, Contacto...)',
         'Diseño 100% personalizado a la identidad de tu marca',
         'SEO local básico para aparecer correctamente en Google',
         'Sistema de reserva de citas integrado',
         'Botón de WhatsApp directo para contacto con un clic',
-        'Email Marketing',
         '15 días de soporte técnico gratuito tras la entrega',
       ],
       cta: 'Solicitar presupuesto',
@@ -40,6 +39,7 @@ export default function Precios() {
       items: [
         'Todo lo incluido en el Paquete Web Profesional',
         'Chatbot con IA + automatización de clientes potenciales',
+        'Email Marketing',
         'Integración de WhatsApp API / Email Automation',
         'Sistema de reserva de citas y presupuestos online',
         'Formación incluida: sesión de 1h por videollamada para gestionar tu sistema',
